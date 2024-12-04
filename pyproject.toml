@@ -16,7 +16,7 @@ dynamic = ["version"]
 requires-python = ">= 3.9"
 # https://pypi.org/project/inky/
 dependencies = [
-    "cv2",
+    "opencv-python",
     "numpy",
 ]
 classifiers = [
@@ -60,7 +60,7 @@ classifiers = [
 Repository = "https://github.com/michimussato/movie-barcodes.git"
 
 [project.scripts]
-pimo = "movie_barcodes.barcode:run"
+movie-barcode = "movie_barcodes.barcode:run"
 
 [tool.setuptools]
 # https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html

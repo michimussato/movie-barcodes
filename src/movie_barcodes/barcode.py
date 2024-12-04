@@ -85,7 +85,7 @@ def parse_args(args):
 
     parser.add_argument(
         "--video",
-        "-v",
+        # "-vf",
         dest="video",
         metavar="VIDEO",
         default=None,
@@ -98,7 +98,7 @@ def parse_args(args):
         "--uniform",
         "-u",
         dest="uniform",
-        metavar="UNIFORM_COLS",
+        # metavar="UNIFORM_COLS",
         default=False,
         action="store_true",
         required=False,
@@ -129,7 +129,7 @@ def parse_args(args):
 
     parser.add_argument(
         "--height",
-        "-h",
+        # "-h",
         dest="height",
         metavar="HEIGHT",
         required=False,
