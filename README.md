@@ -65,20 +65,18 @@ The Handmaiden
 ## Usage
 ```
 $ movie-barcode --help
-usage: movie-barcode [-h] [-v] [-vv] --video VIDEO [--uniform] --out-dir OUT_DIR [--width WIDTH] [--height HEIGHT] [--sample-height SAMPLE_HEIGHT]
+usage: movie-barcode [-h] [-v] [-vv] --video VIDEO [--uniform] [--out-dir OUT_DIR] [--width WIDTH] [--height HEIGHT] [--sample-height SAMPLE_HEIGHT]
 
 options:
   -h, --help            show this help message and exit
   -v, --verbose         set loglevel to INFO
   -vv, --very-verbose   set loglevel to DEBUG
   --video VIDEO         Video file.
-  --uniform, -u         Use uniform color columns.
-  --out-dir OUT_DIR, -d OUT_DIR
-                        Where to save the output file.
-  --width WIDTH, -w WIDTH
-                        Width of the barcoded image.
+  --uniform             Use uniform color columns.
+  --out-dir OUT_DIR     Where to save the output file.
+  --width WIDTH         Width of the barcoded image.
   --height HEIGHT       Height of the barcoded image.
-  --sample-height SAMPLE_HEIGHT, -s SAMPLE_HEIGHT
+  --sample-height SAMPLE_HEIGHT
                         Sample Height of the barcoded image. In compressed mode, each frame is resized into a 1xSAMPLE_HEIGHT vector. SAMPLE_HEIGHT should be at most the input
                         height and at least 1 (which is equivalent to uniform mode). Smaller values yield smoother results.
 ```

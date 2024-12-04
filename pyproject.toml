@@ -14,7 +14,6 @@ readme = "README.md"
 name = "movie-barcodes"
 dynamic = ["version"]
 requires-python = ">= 3.9"
-# https://pypi.org/project/inky/
 dependencies = [
     "opencv-python",
     "numpy",

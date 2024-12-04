@@ -1,6 +1,3 @@
-# USAGE: python barcode.py -video VIDEO [-u]
-
-import os
 import sys
 import time
 import argparse
@@ -24,8 +21,7 @@ def generate_barcode(args):
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     # sample at most 8*OUT_WIDTH frames
     nth_frame = max(1, int(total_frames / args.width / 8))
-    print("Sampling every {} frame(s); {} total frames"
-        .format(nth_frame, total_frames))
+    print(f"Sampling every {nth_frame} frame(s); {total_frames} total frames")
 
     counter, avg_cols = 0, []
     while cap.isOpened():
@@ -41,20 +37,33 @@ def generate_barcode(args):
                     )
                 )
             else:
-                avg_cols.append(np.array([[np.mean(frame, axis=(0, 1))]]))
+                avg_cols.append(
+                    np.array(
+                        [
+                            [
+                                np.mean(
+                                    frame,
+                                    axis=(0, 1)
+                                )
+                            ]
+                        ]
+                    )
+                )
             print(
-                "{}%".format(np.round(counter/total_frames * 100, 2)),
-                end="\r", flush=True
+                f"{np.round(counter/total_frames * 100, 2)}%",
+                end="\r",
+                flush=True
             )
         counter += 1
 
     cap.release()
     concatenated = np.concatenate(avg_cols, axis=1)
-    print("Resizing {} frames to {}".format(concatenated.shape[1], args.width))
+    print(f"Resizing {concatenated.shape[1]} frames to {args.width}")
     barcode = cv2.resize(concatenated, (args.width, args.height))
 
-    out_png = args.out_dir / "barcode.png"
-    cv2.imwrite(out_png, barcode)
+    out_png = args.out_dir / f"{args.video.stem}.png"
+    print(out_png)
+    cv2.imwrite(out_png.as_posix(), barcode)
 
     return out_png
 
@@ -85,7 +94,6 @@ def parse_args(args):
 
     parser.add_argument(
         "--video",
-        # "-vf",
         dest="video",
         metavar="VIDEO",
         default=None,
@@ -96,9 +104,7 @@ def parse_args(args):
 
     parser.add_argument(
         "--uniform",
-        "-u",
         dest="uniform",
-        # metavar="UNIFORM_COLS",
         default=False,
         action="store_true",
         required=False,
@@ -107,18 +113,16 @@ def parse_args(args):
 
     parser.add_argument(
         "--out-dir",
-        "-d",
         dest="out_dir",
         metavar="OUT_DIR",
-        required=True,
-        default=False,
+        required=False,
+        default=pathlib.Path().cwd(),
         type=pathlib.Path,
         help="Where to save the output file.",
     )
 
     parser.add_argument(
         "--width",
-        "-w",
         dest="width",
         metavar="WIDTH",
         required=False,
@@ -129,7 +133,6 @@ def parse_args(args):
 
     parser.add_argument(
         "--height",
-        # "-h",
         dest="height",
         metavar="HEIGHT",
         required=False,
@@ -140,7 +143,6 @@ def parse_args(args):
 
     parser.add_argument(
         "--sample-height",
-        "-s",
         dest="sample_height",
         metavar="SAMPLE_HEIGHT",
         required=False,
@@ -176,8 +178,7 @@ def main(args):
     generate_barcode(args)
 
     elapsed_time = time.time() - start_time
-    print("Time elapsed: {}"
-        .format(time.strftime("%H:%M:%S", time.gmtime(elapsed_time))))
+    print(f"Time elapsed: {time.strftime('%H:%M:%S', time.gmtime(elapsed_time))}")
 
 
 def run():
