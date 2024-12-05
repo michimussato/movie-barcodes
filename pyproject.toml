@@ -4,6 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 authors = [
+    {name = "Andrew Campbell", email = ""},
     {name = "Michael Mussato", email = "michimussato@gmail.com"},
 ]
 maintainers = [
@@ -59,7 +60,7 @@ classifiers = [
 Repository = "https://github.com/michimussato/movie-barcodes.git"
 
 [project.scripts]
-movie-barcode = "movie_barcodes.barcode:run"
+movie-barcode = "movie_barcodes.movie_barcode:run"
 
 [tool.setuptools]
 # https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html

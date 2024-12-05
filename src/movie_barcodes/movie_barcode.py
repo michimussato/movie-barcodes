@@ -6,9 +6,9 @@ import pathlib
 import cv2
 import numpy as np
 
-__author__ = "Michael Mussato"
-__copyright__ = "Michael Mussato"
-__license__ = "MIT"
+__author__ = "Andrew Campbell"
+__copyright__ = "Andrew Campbell"
+__license__ = "GNU General Public License v3.0"
 
 _logger = logging.getLogger(__name__)
 
@@ -38,16 +38,12 @@ def generate_barcode(args):
                 )
             else:
                 avg_cols.append(
-                    np.array(
-                        [
-                            [
-                                np.mean(
-                                    frame,
-                                    axis=(0, 1)
-                                )
-                            ]
-                        ]
-                    )
+                    np.array([[
+                        np.mean(
+                            frame,
+                            axis=(0, 1)
+                        )
+                    ]])
                 )
             print(
                 f"{np.round(counter/total_frames * 100, 2)}%",
