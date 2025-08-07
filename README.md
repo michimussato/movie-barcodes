@@ -1,5 +1,6 @@
 <!-- TOC -->
 * [movie-barcodes](#movie-barcodes)
+  * [Install](#install)
   * [Similar](#similar)
   * [Example Results](#example-results)
       * [Uniform column mode](#uniform-column-mode)
@@ -26,7 +27,18 @@ adjusts sample rate according to the length of
 the video. Runs in under 2 minutes for a typical 
 2 hour movie.
 
-Supported on Python 3 and OpenCV 3+. Tested on macOS.
+Supported on Python 3 and OpenCV 3+.
+
+## Install
+
+```shell
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+```shell
+pip install git+https://github.com/michimussato/movie-barcodes
+```
 
 ## Similar
 

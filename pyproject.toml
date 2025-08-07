@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 authors = [
-    {name = "Andrew Campbell", email = ""},
+    {name = "Andrew Campbell", email = "unknown@unknown.uk"},
     {name = "Michael Mussato", email = "michimussato@gmail.com"},
 ]
 maintainers = [
