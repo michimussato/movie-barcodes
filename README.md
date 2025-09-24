@@ -75,6 +75,7 @@ The Handmaiden
 <img src="uniform_barcode_examples/The_Handmaiden_barcode.jpg" width="100%">
 
 ## Usage
+
 ```
 $ movie-barcode --help
 usage: movie-barcode [-h] [-v] [-vv] --video VIDEO [--uniform] [--out-dir OUT_DIR] [--width WIDTH] [--height HEIGHT] [--sample-height SAMPLE_HEIGHT]
@@ -91,4 +92,10 @@ options:
   --sample-height SAMPLE_HEIGHT
                         Sample Height of the barcoded image. In compressed mode, each frame is resized into a 1xSAMPLE_HEIGHT vector. SAMPLE_HEIGHT should be at most the input
                         height and at least 1 (which is equivalent to uniform mode). Smaller values yield smoother results.
+```
+
+Example:
+
+```shell
+movie-barcode --video "<full_path_to_movie>.mp4" --out-dir "<full_path_to_output_dir>/" --width 3000 --height 1 --sample-height 1
 ```
