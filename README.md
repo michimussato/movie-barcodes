@@ -97,5 +97,10 @@ options:
 Example:
 
 ```shell
-movie-barcode --video "<full_path_to_movie>.mp4" --out-dir "<full_path_to_output_dir>/" --width 3000 --height 1 --sample-height 1
+movie-barcode \
+    --video "<full_path_to_movie>.mp4" \
+    --out-dir "<full_path_to_output_dir>/" \
+    --width 3000 \
+    --height 1 \
+    --sample-height 1
 ```
