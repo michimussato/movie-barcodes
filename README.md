@@ -5,6 +5,7 @@
   * [Example Results](#example-results)
       * [Uniform column mode](#uniform-column-mode)
   * [Usage](#usage)
+  * [Known Issues](#known-issues)
 <!-- TOC -->
 
 ---
@@ -103,4 +104,71 @@ movie-barcode \
     --width 3000 \
     --height 1 \
     --sample-height 1
+```
+
+## Known Issues
+
+- `movie-barcode` beaks with `mkv`
+  - Tested with [Welcome to the Sticks - Stream URL](https://jellyfin.meemoo.ch/Items/bd45d10d95caf5d2500be7c93c8dec7a/Download?api_key=a072cb89cabd4dbcb9fbdbec891a2374)/[Welcome to the Sticks - Jellyfin URL](https://jellyfin.meemoo.ch/web/#/details?id=bd45d10d95caf5d2500be7c93c8dec7a&serverId=bba486d6e99743f1bd727371eb0625c8)
+
+### NixOS
+
+```
+(.venv) [michael@lenovo movie-barcodes] (master)$ movie-barcode \
+    --video "/home/michael/Downloads/Welcome.To.The.Sticks.2008.720p.BluRay.x264.AAC-[YTS.MX].mp4" \
+    --out-dir "/home/michael/Documents/Obsidian/Michael/Projects/Ap n Daun Movie Night/images/Bienvenue chez les Ch'tis (2008)/" \
+    --width 3000 \
+    --height 1 \
+    --sample-height 1
+OpenCV bindings requires "numpy" package.
+Install it via command:
+    pip install numpy
+Traceback (most recent call last):
+  File "/home/michael/git/backup_copy/repos/movie-barcodes/.venv/lib/python3.13/site-packages/numpy/_core/__init__.py", line 24, in <module>
+    from . import multiarray
+  File "/home/michael/git/backup_copy/repos/movie-barcodes/.venv/lib/python3.13/site-packages/numpy/_core/multiarray.py", line 11, in <module>
+    from . import _multiarray_umath, overrides
+ImportError: libstdc++.so.6: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/michael/git/backup_copy/repos/movie-barcodes/.venv/bin/movie-barcode", line 3, in <module>
+    from movie_barcodes.movie_barcode import run
+  File "/home/michael/git/backup_copy/repos/movie-barcodes/.venv/lib/python3.13/site-packages/movie_barcodes/movie_barcode.py", line 6, in <module>
+    import cv2
+  File "/home/michael/git/backup_copy/repos/movie-barcodes/.venv/lib/python3.13/site-packages/cv2/__init__.py", line 11, in <module>
+    import numpy
+  File "/home/michael/git/backup_copy/repos/movie-barcodes/.venv/lib/python3.13/site-packages/numpy/__init__.py", line 109, in <module>
+    from numpy.__config__ import show_config
+  File "/home/michael/git/backup_copy/repos/movie-barcodes/.venv/lib/python3.13/site-packages/numpy/__config__.py", line 4, in <module>
+    from numpy._core._multiarray_umath import (
+    ...<3 lines>...
+    )
+  File "/home/michael/git/backup_copy/repos/movie-barcodes/.venv/lib/python3.13/site-packages/numpy/_core/__init__.py", line 85, in <module>
+    raise ImportError(msg) from exc
+ImportError: 
+                                                                                                                                                   
+IMPORTANT: PLEASE READ THIS FOR ADVICE ON HOW TO SOLVE THIS ISSUE!                                                                                 
+                                                                                                                                                   
+Importing the numpy C-extensions failed. This error can happen for                                                                                 
+many reasons, often due to issues with your setup or how NumPy was                                                                                 
+installed.                                                                                                                                         
+                                                                                                                                                   
+We have compiled some common reasons and troubleshooting tips at:                                                                                  
+                                                                                                                                                   
+    https://numpy.org/devdocs/user/troubleshooting-importerror.html                                                                                
+                                                                                                                                                   
+Please note and check the following:                                                                                                               
+                                                                                                                                                   
+  * The Python version is: Python 3.13 from "/home/michael/git/backup_copy/repos/movie-barcodes/.venv/bin/python3.13"                              
+  * The NumPy version is: "2.5.4"                                                                                                                  
+                                                                                                                                                   
+and make sure that they are the versions you expect.                                                                                               
+                                                                                                                                                   
+Please carefully study the information and documentation linked above.                                                                             
+This is unlikely to be a NumPy issue but will be caused by a bad install                                                                           
+or environment on your machine.                                                                                                                    
+                                                                                                                                                   
+Original error was: libstdc++.so.6: cannot open shared object file: No such file or directory 
 ```
