@@ -6,6 +6,7 @@
       * [Uniform column mode](#uniform-column-mode)
   * [Usage](#usage)
   * [Known Issues](#known-issues)
+  * [NixOS (WIP)](#nixos-wip)
 <!-- TOC -->
 
 ---
@@ -39,6 +40,11 @@ source .venv/bin/activate
 
 ```shell
 pip install git+https://github.com/michimussato/movie-barcodes
+```
+
+Dev:
+```shell
+pip install --editable .
 ```
 
 ## Similar
@@ -111,7 +117,9 @@ movie-barcode \
 - `movie-barcode` beaks with `mkv`
   - Tested with [Welcome to the Sticks - Stream URL](https://jellyfin.meemoo.ch/Items/bd45d10d95caf5d2500be7c93c8dec7a/Download?api_key=a072cb89cabd4dbcb9fbdbec891a2374)/[Welcome to the Sticks - Jellyfin URL](https://jellyfin.meemoo.ch/web/#/details?id=bd45d10d95caf5d2500be7c93c8dec7a&serverId=bba486d6e99743f1bd727371eb0625c8)
 
-### NixOS
+---
+
+## NixOS (WIP)
 
 ```
 (.venv) [michael@lenovo movie-barcodes] (master)$ movie-barcode \
@@ -171,4 +179,20 @@ This is unlikely to be a NumPy issue but will be caused by a bad install
 or environment on your machine.                                                                                                                    
                                                                                                                                                    
 Original error was: libstdc++.so.6: cannot open shared object file: No such file or directory 
+```
+
+```shell
+nix-shell
+# python3 -m venv .venv
+source .venv/bin/activate
+
+VIDEO_IN_FILE="<full_path_to_video_file>"
+BARCODE_OUT_DIR="<full_path_to_output_dir>"
+
+movie-barcode \
+    --video ${VIDEO_IN_FILE} \
+    --out-dir ${BARCODE_OUT_DIR} \
+    --width 3000 \
+    --height 1 \
+    --sample-height 1
 ```
