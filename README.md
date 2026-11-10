@@ -196,3 +196,7 @@ movie-barcode \
     --height 1 \
     --sample-height 1
 ```
+
+Todo
+- [ ] maybe set `--width` to the actual with needed in the Movie Night poster?
+  - See: https://ayon.openstudiolandscapes.meemoo.ch/projects/MovieNight/products?project=MovieNight&type=version&id=61e4a5a2dcf611f19e85286b353056bf&activity=05bbe9b0dcf711f1a1cb4b46f1fcdc07
