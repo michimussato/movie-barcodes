@@ -17,7 +17,12 @@ _logger = logging.getLogger(__name__)
 
 
 def generate_barcode(args):
-    cap = cv2.VideoCapture(args.video)
+
+    video: pathlib.Path = args.video
+
+    assert video.exists(), "Video file does not exist. Check path: %s" % video.as_posix()
+
+    cap = cv2.VideoCapture(video)
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     # sample at most 8*OUT_WIDTH frames
     nth_frame = max(1, int(total_frames / args.width / 8))
@@ -57,7 +62,7 @@ def generate_barcode(args):
     print(f"Resizing {concatenated.shape[1]} frames to {args.width}")
     barcode = cv2.resize(concatenated, (args.width, args.height))
 
-    out_png = args.out_dir / f"{args.video.stem}.png"
+    out_png = args.out_dir / f"{video.stem}.png"
     print(out_png)
     cv2.imwrite(out_png.as_posix(), barcode)
 
