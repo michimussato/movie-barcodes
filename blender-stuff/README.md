@@ -9,6 +9,7 @@
 * [Command Line Render](#command-line-render)
   * [With `--python-expr <expr>`](#with---python-expr-expr)
   * [With `--python <file>`](#with---python-file)
+  * [Blender as a Review Player](#blender-as-a-review-player)
 * [Known Issues](#known-issues)
 <!-- TOC -->
 
@@ -170,6 +171,32 @@ blender \
     --python "${PY_TMP}" \
     --threads 8 \
     2>&1 | tee "/data/share/projects/ayon/MovieNight/shot/work/rendering/render/${TMUX_SESSION}_render.log"
+
+# Todo:
+#  - [ ] possibly set `--render-output <output_dir>` via commandline manually
+#  - [ ] possibly set frame range via commandline manually
+
+# Argument Order:
+#         Arguments are executed in the order they are given. eg:
+#         # blender --background test.blend --render-frame 1 --render-output "/tmp"
+#         ...will not render to '/tmp' because '--render-frame 1' renders before the output path is set.
+#         # blender --background --render-output /tmp test.blend --render-frame 1
+#         ...will not render to '/tmp' because loading the blend-file overwrites the render output that was set.
+#         # blender --background test.blend --render-output /tmp --render-frame 1
+#         ...works as expected.
+```
+
+## Blender as a Review Player
+
+```shell
+nix develop github:michimussato/flake-prod#blender-4-4-3-devshell --command fhs
+blender \
+    -a \
+    -f 24 1.0 \
+    -j 1 \
+    -s 1001 \
+    -e 1059 \
+    /data/share/projects/ayon/MovieNight/shot/work/rendering/render/MoN_shot_rendering_v034_4-4-3/Poster/Image{1001..1059}.png
 ```
 
 ---
