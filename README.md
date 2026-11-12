@@ -7,6 +7,9 @@
   * [Usage](#usage)
   * [Known Issues](#known-issues)
   * [NixOS (WIP)](#nixos-wip)
+* [ffmpeg to Gif](#ffmpeg-to-gif)
+  * [Single Pass](#single-pass)
+  * [Multi Pass](#multi-pass)
 <!-- TOC -->
 
 ---
