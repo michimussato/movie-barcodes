@@ -38,17 +38,39 @@ texture_set = {
 bpy.data.scenes["Scene"].loom.frame_input = str(frames)
 bpy.data.scenes["Scene"].loom.command_line = False
 
+# Movie Night texture is currently relative
+# Todo:
+#  - [ ] publish to Ayon
+bpy.data.images["MOVIE_NIGHT_TEXTURE"].filepath = "/home/michael/Documents/Obsidian/Michael/Projects/Ap n Daun Movie Night/fonts/kalieb_luxury_font_purchased_M_002.png"
+
 if OVERRIDE_LOOM_OUTPUT_PATHS:
-    blend_project: str = os.environ["TMUX_SESSION"]  # the blend file without .blend extension
     movie_night_project: str = os.environ["MOVIE_NIGHT_PROJECT"]
 
+    # Default render root is:
+    # `//render`
     # `//` means `relative to the .blend file`
+    #
+    # Override here to set absolute path
+    # so that the render does not end up
+    # where the `hero` blend file lives
+    # (`/data/share/projects/ayon/MovieNight/shot/publish/workfile/workfileRendering/hero/`).
+    #
+    # For now, we set to
+    # `/data/share/projects/ayon/MovieNight/shot/work/rendering/render/`
+    # but this is arbitrary. Maybe there is
+    # a better target directory.
+    render_root: pathlib.Path = pathlib.Path("/data/share/projects/ayon/MovieNight/shot/work/rendering/render/")
+    render_root.mkdir(
+        exist_ok=True,
+        parents=True,
+    )
+
     bpy.data.scenes["Scene"].render.filepath = \
-        f"//render/{movie_night_project}_{blend_project}/LineArt/api_022-01_192_0001.exr"  # Todo: change the file name after test
+        render_root.joinpath(f"{movie_night_project}/LineArt/api_022-01_192_0001.exr").as_posix()  # Todo: change the file name after test
     bpy.data.scenes["Scene"].node_tree.nodes["FILE_OUTPUT.AND"].base_path = \
-        f"//render/{movie_night_project}_{blend_project}/AnD/"
+        render_root.joinpath(f"{movie_night_project}/AnD/").as_posix()
     bpy.data.scenes["Scene"].node_tree.nodes["FILE_OUTPUT.POSTER"].base_path = \
-        f"//render/{movie_night_project}_{blend_project}/Poster/"
+        render_root.joinpath(f"{movie_night_project}/Poster/").as_posix()
 
 # set the texture file paths in the texture nodes
 # for node in nodes:

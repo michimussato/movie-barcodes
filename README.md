@@ -219,6 +219,7 @@ Resources:
 ```shell
 MOVIE_NIGHT_PROJECT="BadSanta"
 INPUT="/data/share/projects/ayon/MovieNight/shot/publish/render/renderRendering${MOVIE_NIGHT_PROJECT}/hero/MoN_shot_renderRendering${MOVIE_NIGHT_PROJECT}_hero.*.png"
+#     "/data/share/projects/ayon/MovieNight/shot/publish/render/renderRenderingTheWolfOfWallStreet/hero/MoN_shot_renderRenderingTheWolfOfWallStreet_hero.1001.png"
 OUTPUT="/home/michael/Notes/Obsidian/Michael/Projects/Ap n Daun Movie Night/presentation/media/MoN_shot_renderRendering${MOVIE_NIGHT_PROJECT}.gif"
 
 ffmpeg \
