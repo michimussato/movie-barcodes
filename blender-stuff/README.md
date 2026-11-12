@@ -10,6 +10,8 @@
   * [With `--python-expr <expr>`](#with---python-expr-expr)
   * [With `--python <file>`](#with---python-file)
   * [Blender as a Review Player](#blender-as-a-review-player)
+  * [Render Settings](#render-settings)
+  * [File Output Nodes](#file-output-nodes)
 * [Known Issues](#known-issues)
 <!-- TOC -->
 
@@ -138,39 +140,53 @@ blender \
 ```shell
 export PY_TMP=$(mktemp --suffix=".py")
 
-tee ${PY_TMP} < "./blender.py"
+tee ${PY_TMP} < "./blender.py" | bat --file-name ${PY_TMP} --language Python -
 
 echo "${PY_TMP}"
 ```
 
 ```shell
-export TMUX_SESSION="MoN_shot_rendering_v034_4-4-3"
+export TMUX_SESSION="MoN_shot_rendering_v035_4-4-3"
 export BLENDER_USER_SCRIPTS="/home/michael/.local/share/AYON/addons/blender_1.1.9/ayon_blender/blender_addon"
 export MOVIE_NIGHT_BLEND_FILE="/data/share/projects/ayon/MovieNight/shot/work/rendering/${TMUX_SESSION}.blend"
 
 export FRAMES="1001-1059"
 
-# Example Texture Set: The Wolf of Wall Street
-export AYON_SCREENSHOT="/data/share/projects/ayon/MovieNight/shot/publish/texture/textureTheWolfOfWallStreetScreenshot/hero/MoN_shot_textureTheWolfOfWallStreetScreenshot_hero.jpg"
-export AYON_DATE="/data/share/projects/ayon/MovieNight/shot/publish/texture/textureTheWolfOfWallStreetDate/hero/MoN_shot_textureTheWolfOfWallStreetDate_hero.png"
-export AYON_BARCODE="/data/share/projects/ayon/MovieNight/shot/publish/texture/textureTheWolfOfWallStreetBarcode/hero/MoN_shot_textureTheWolfOfWallStreetBarcode_hero.png"
-export AYON_POSTER="/data/share/projects/ayon/MovieNight/shot/publish/texture/textureTheWolfOfWallStreetPoster/hero/MoN_shot_textureTheWolfOfWallStreetPoster_hero.jpg"
+# Texture Sets must be published on to Ayon
+# Only 'hero' versions can be used
 
+# Example Texture Set: The Wolf of Wall Street
+export MOVIE_NIGHT_PROJECT="TheWolfOfWallStreet"
 # Example Texture Set: Bad Santa
-export AYON_SCREENSHOT="/data/share/projects/ayon/MovieNight/shot/publish/texture/textureBadSantaScreenshot/hero/MoN_shot_textureBadSantaScreenshot_hero.jpg"
-export AYON_DATE="/data/share/projects/ayon/MovieNight/shot/publish/texture/textureBadSantaDate/hero/MoN_shot_textureBadSantaDate_hero.png"
-export AYON_BARCODE="/data/share/projects/ayon/MovieNight/shot/publish/texture/textureBadSantaBarcode/hero/MoN_shot_textureBadSantaBarcode_hero.png"
-export AYON_POSTER="/data/share/projects/ayon/MovieNight/shot/publish/texture/textureBadSantaPoster/hero/MoN_shot_textureBadSantaPoster_hero.jpg"
+export MOVIE_NIGHT_PROJECT="BadSanta"
+
+export AYON_SCREENSHOT="/data/share/projects/ayon/MovieNight/shot/publish/texture/texture${MOVIE_NIGHT_PROJECT}Screenshot/hero/MoN_shot_texture${MOVIE_NIGHT_PROJECT}Screenshot_hero.jpg"
+export AYON_DATE="/data/share/projects/ayon/MovieNight/shot/publish/texture/texture${MOVIE_NIGHT_PROJECT}Date/hero/MoN_shot_texture${MOVIE_NIGHT_PROJECT}Date_hero.png"
+export AYON_BARCODE="/data/share/projects/ayon/MovieNight/shot/publish/texture/texture${MOVIE_NIGHT_PROJECT}Barcode/hero/MoN_shot_texture${MOVIE_NIGHT_PROJECT}Barcode_hero.png"
+export AYON_POSTER="/data/share/projects/ayon/MovieNight/shot/publish/texture/texture${MOVIE_NIGHT_PROJECT}Poster/hero/MoN_shot_texture${MOVIE_NIGHT_PROJECT}Poster_hero.jpg"
+
+file ${AYON_SCREENSHOT}
+file ${AYON_DATE}
+file ${AYON_BARCODE}
+file ${AYON_POSTER}
 
 tmux new -d -s ${TMUX_SESSION} 'nix develop github:michimussato/flake-prod#blender-4-4-3-devshell --command fhs'
 tmux a -t ${TMUX_SESSION}
+
+
+RENDER_LOG="/data/share/projects/ayon/MovieNight/shot/work/rendering/render/${MOVIE_NIGHT_PROJECT}_${TMUX_SESSION}/render.log"
+mkdir -p $(dirname ${RENDER_LOG})
+
+set +x
+env | tee ${RENDER_LOG}
 
 blender \
     --background \
     ${MOVIE_NIGHT_BLEND_FILE} \
     --python "${PY_TMP}" \
     --threads 8 \
-    2>&1 | tee "/data/share/projects/ayon/MovieNight/shot/work/rendering/render/${TMUX_SESSION}_render.log"
+    2>&1 | tee --append ${RENDER_LOG}
+set -x
 
 # Todo:
 #  - [ ] possibly set `--render-output <output_dir>` via commandline manually
@@ -188,6 +204,9 @@ blender \
 
 ## Blender as a Review Player
 
+Reference:
+- [Animation Player](https://docs.blender.org/manual/en/4.4/render/output/animation_player.html)
+
 ```shell
 nix develop github:michimussato/flake-prod#blender-4-4-3-devshell --command fhs
 blender \
@@ -198,6 +217,29 @@ blender \
     -e 1059 \
     /data/share/projects/ayon/MovieNight/shot/work/rendering/render/MoN_shot_rendering_v034_4-4-3/Poster/Image{1001..1059}.png
 ```
+
+## Render Settings
+
+| Field       | Data Path                              | Default Value |   |
+|-------------|----------------------------------------|---------------|---|
+| Frame Start | `bpy.data.scenes["Scene"].frame_start` | `1001`        |   |
+| Frame End   | `bpy.data.scenes["Scene"].frame_end`   | `1059`        |   |
+|             |                                        |               |   |
+
+
+## File Output Nodes
+
+Render Out
+- Key: `bpy.data.scenes["Scene"].render.filepath`
+- Value: `//render/$BLEND/LineArt/api_022-01_192_0001.exr`
+
+AnD
+- Key: `bpy.data.scenes["Scene"].node_tree.nodes["FILE_OUTPUT.AND"].base_path`
+- Value: `//render/$BLEND/AnD/`
+
+Poster 
+- Key: `bpy.data.scenes["Scene"].node_tree.nodes["FILE_OUTPUT.POSTER"].base_path` 
+- Value: `//render/$BLEND/Poster/`
 
 ---
 
