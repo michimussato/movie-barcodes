@@ -200,3 +200,42 @@ movie-barcode \
 Todo
 - [ ] maybe set `--width` to the actual with needed in the Movie Night poster?
   - See: https://ayon.openstudiolandscapes.meemoo.ch/projects/MovieNight/products?project=MovieNight&type=version&id=61e4a5a2dcf611f19e85286b353056bf&activity=05bbe9b0dcf711f1a1cb4b46f1fcdc07
+
+# ffmpeg to Gif
+
+Resources:
+- https://zayne.io/articles/gifs-and-video-from-images-with-ffmpeg
+- https://www.bannerbear.com/blog/how-to-make-gifs-from-images-using-ffmpeg/
+
+## Single Pass
+
+- [x] Tested
+- [x] Working
+
+```shell
+MOVIE_NIGHT_PROJECT="BadSanta"
+INPUT="/data/share/projects/ayon/MovieNight/shot/publish/render/renderRendering${MOVIE_NIGHT_PROJECT}/hero/MoN_shot_renderRendering${MOVIE_NIGHT_PROJECT}_hero.*.png"
+OUTPUT="/home/michael/Notes/Obsidian/Michael/Projects/Ap n Daun Movie Night/presentation/media/MoN_shot_renderRendering${MOVIE_NIGHT_PROJECT}.gif"
+
+ffmpeg \
+    -framerate 24 \
+    -pattern_type glob \
+    -i "${INPUT}" \
+    -y "${OUTPUT}"
+
+```
+
+## Multi Pass
+
+- [ ] tested
+- [ ] working
+
+```shell
+ffmpeg \
+    -framerate 24 \
+    -pattern_type glob \
+    -i "/data/share/projects/ayon/MovieNight/shot/publish/render/renderRenderingMain/v004/MoN_shot_renderRenderingMain_v004.*.png" \
+    -i "/home/michael/Notes/Obsidian/Michael/Projects/Ap n Daun Movie Night/presentation/media/palette.png" \
+    -filter_complex "fps=24,scale=640:-1:flags=lanczos[x];[x][1:v]paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle" \
+    -y output_hq.gif
+```
