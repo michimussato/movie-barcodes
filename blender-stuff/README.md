@@ -114,6 +114,11 @@ bpy.ops.render.image_sequence(
 
 ## With `--python-expr <expr>`
 
+> [!IMPORTANT]
+>
+> This is just for reference.
+> We actually use [`--python <file>`](#with---python-file).
+
 ```shell
 export TMUX_SESSION="MoN_shot_rendering_v034_4-4-3"
 export BLENDER_USER_SCRIPTS="/home/michael/.local/share/AYON/addons/blender_1.1.9/ayon_blender/blender_addon"
@@ -145,40 +150,53 @@ tee ${PY_TMP} < "./blender.py" | bat --file-name ${PY_TMP} --language Python -
 echo "${PY_TMP}"
 ```
 
+Set `MOVIE_NIGHT_PROJECT`
+
+Examples:
+- `"TheWolfOfWallStreet"`
+- `"BadSanta"`
+
 ```shell
-export TMUX_SESSION="MoN_shot_rendering_v035_4-4-3"
-export BLENDER_USER_SCRIPTS="/home/michael/.local/share/AYON/addons/blender_1.1.9/ayon_blender/blender_addon"
-export MOVIE_NIGHT_BLEND_FILE="/data/share/projects/ayon/MovieNight/shot/work/rendering/${TMUX_SESSION}.blend"
-
-export FRAMES="1001-1059"
-
 # Texture Sets must be published on to Ayon
 # Only 'hero' versions can be used
 
-# Example Texture Set: The Wolf of Wall Street
 export MOVIE_NIGHT_PROJECT="TheWolfOfWallStreet"
-# Example Texture Set: Bad Santa
-export MOVIE_NIGHT_PROJECT="BadSanta"
+```
+
+```shell
+export MOVIE_NIGHT_BLEND_FILE="/data/share/projects/ayon/MovieNight/shot/publish/workfile/workfileRendering/hero/MoN_shot_workfileRendering_hero.blend"
+
+# This is needed for the Loom Addon:
+#  - [ ] move to globally accessible location (/data)
+export BLENDER_USER_SCRIPTS="/home/michael/.local/share/AYON/addons/blender_1.1.9/ayon_blender/blender_addon"
+
+export FRAMES="1001-1059"
 
 export AYON_SCREENSHOT="/data/share/projects/ayon/MovieNight/shot/publish/texture/texture${MOVIE_NIGHT_PROJECT}Screenshot/hero/MoN_shot_texture${MOVIE_NIGHT_PROJECT}Screenshot_hero.jpg"
 export AYON_DATE="/data/share/projects/ayon/MovieNight/shot/publish/texture/texture${MOVIE_NIGHT_PROJECT}Date/hero/MoN_shot_texture${MOVIE_NIGHT_PROJECT}Date_hero.png"
 export AYON_BARCODE="/data/share/projects/ayon/MovieNight/shot/publish/texture/texture${MOVIE_NIGHT_PROJECT}Barcode/hero/MoN_shot_texture${MOVIE_NIGHT_PROJECT}Barcode_hero.png"
 export AYON_POSTER="/data/share/projects/ayon/MovieNight/shot/publish/texture/texture${MOVIE_NIGHT_PROJECT}Poster/hero/MoN_shot_texture${MOVIE_NIGHT_PROJECT}Poster_hero.jpg"
 
-file ${AYON_SCREENSHOT}
-file ${AYON_DATE}
-file ${AYON_BARCODE}
-file ${AYON_POSTER}
-
-tmux new -d -s ${TMUX_SESSION} 'nix develop github:michimussato/flake-prod#blender-4-4-3-devshell --command fhs'
-tmux a -t ${TMUX_SESSION}
+# Note:
+# The output is not versioned
+export RENDER_LOG="/data/share/projects/ayon/MovieNight/shot/work/rendering/render/${MOVIE_NIGHT_PROJECT}/render.log"
 
 
-RENDER_LOG="/data/share/projects/ayon/MovieNight/shot/work/rendering/render/${MOVIE_NIGHT_PROJECT}_${TMUX_SESSION}/render.log"
+# Create and start `tmux` session
+tmux new -d -s ${MOVIE_NIGHT_PROJECT} 'nix develop github:michimussato/flake-prod#blender-4-4-3-devshell --command fhs'
+tmux a -t ${MOVIE_NIGHT_PROJECT}
+
+
+set -x
+
 mkdir -p $(dirname ${RENDER_LOG})
 
-set +x
 env | tee ${RENDER_LOG}
+
+file ${AYON_SCREENSHOT} | tee --append ${RENDER_LOG}
+file ${AYON_DATE} | tee --append ${RENDER_LOG}
+file ${AYON_BARCODE} | tee --append ${RENDER_LOG}
+file ${AYON_POSTER} | tee --append ${RENDER_LOG}
 
 blender \
     --background \
@@ -186,12 +204,15 @@ blender \
     --python "${PY_TMP}" \
     --threads 8 \
     2>&1 | tee --append ${RENDER_LOG}
-set -x
 
-# Todo:
-#  - [ ] possibly set `--render-output <output_dir>` via commandline manually
-#  - [ ] possibly set frame range via commandline manually
+set +x
+```
 
+Todo:
+- [x] possibly set `--render-output <output_dir>` via commandline manually
+- [ ] possibly set frame range via commandline manually
+
+```
 # Argument Order:
 #         Arguments are executed in the order they are given. eg:
 #         # blender --background test.blend --render-frame 1 --render-output "/tmp"
