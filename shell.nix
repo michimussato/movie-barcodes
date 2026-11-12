@@ -10,4 +10,9 @@ pkgs.mkShell {
     libGL
     glib
   ];
+  nativeBuildInputs = with pkgs; [
+    python313
+    python313Packages.pip
+    imagemagick
+  ];
 }
