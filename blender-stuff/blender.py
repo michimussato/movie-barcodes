@@ -41,7 +41,7 @@ bpy.data.scenes["Scene"].loom.command_line = False
 # Todo:
 #  - [x] use absoute path for MOVIE_NIGHT_TEXTURE node
 #  - [x] publish to Ayon
-#  - [ ] publish `.xcf` workfile to Ayon
+#  - [ ] publish `.xcf` workfile (is source for `date` and `movie night` textures) to Ayon
 #        `/home/michael/Documents/Obsidian/Michael/Projects/Ap n Daun Movie Night/fonts/kalieb_luxury_font_purchased_003.xcf`
 # bpy.data.images["MOVIE_NIGHT_TEXTURE"].filepath = "/data/share/projects/ayon/MovieNight/shot/publish/texture/textureMovieNightFontTexture/hero/MoN_shot_textureMovieNightFontTexture_hero.png"
 
