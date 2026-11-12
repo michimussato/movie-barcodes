@@ -10,6 +10,7 @@
 * [ffmpeg to Gif](#ffmpeg-to-gif)
   * [Single Pass](#single-pass)
   * [Multi Pass](#multi-pass)
+  * [MP4 to Gif](#mp4-to-gif)
 <!-- TOC -->
 
 ---
@@ -241,4 +242,30 @@ ffmpeg \
     -i "/home/michael/Notes/Obsidian/Michael/Projects/Ap n Daun Movie Night/presentation/media/palette.png" \
     -filter_complex "fps=24,scale=640:-1:flags=lanczos[x];[x][1:v]paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle" \
     -y output_hq.gif
+```
+
+## MP4 to Gif
+
+Start Frame: `32`
+FPS: `29.904`
+`frame_time` = `frame number` / `frames per second`
+`frame_time` = `-ss 1.07009095773`
+
+`-start_number 32`
+`duration` = `277-32` = `245`
+
+```shell
+ffmpeg \
+    -i input.mp4 \
+    -loop 0 \
+    -start_number 32 \
+    -frames:v 245 \
+    output.gif
+```
+
+This gave me the desired result:
+
+```shell
+# ffmpeg     -i "/home/michael/Documents/Obsidian/Michael/Projects/Ap n Daun Movie Night/presentation/media/_8/The Wolf of Wall Street 1929 fragment.mp4"     -loop 0     -ss 1.07009095773     -frames:v 245     "/home/michael/Documents/Obsidian/Michael/Projects/Ap n Daun Movie Night/presentation/media/_8/The Wolf of Wall Street 1929 fragment.gif"
+ffmpeg     -i "/home/michael/Documents/Obsidian/Michael/Projects/Ap n Daun Movie Night/presentation/media/_8/The Wolf of Wall Street 1929 fragment.mp4"     -loop 0     -ss 1.07009095773     -frames:v 245     "/home/michael/Documents/Obsidian/Michael/Projects/Ap n Daun Movie Night/presentation/media/_8/The Wolf of Wall Street 1929 fragment.gif"
 ```
