@@ -2,6 +2,10 @@ import os
 import pathlib
 import bpy
 
+
+OVERRIDE_LOOM_OUTPUT_PATHS: bool = True
+
+
 _blend_file: str = os.environ["MOVIE_NIGHT_BLEND_FILE"]
 blend_file: pathlib.Path = pathlib.Path(_blend_file)
 
@@ -41,6 +45,18 @@ for node in nodes:
 # bpy.data.scenes["Scene"].loom.guess_frames()
 bpy.data.scenes["Scene"].loom.frame_input = str(frames)
 bpy.data.scenes["Scene"].loom.command_line = False
+
+if OVERRIDE_LOOM_OUTPUT_PATHS:
+    blend_project: str = os.environ["TMUX_SESSION"]  # the blend file without .blend extension
+    movie_night_project: str = os.environ["MOVIE_NIGHT_PROJECT"]
+
+    # `//` means `relative` to the .blend file
+    bpy.data.scenes["Scene"].render.filepath = \
+        f"//render/{movie_night_project}_{blend_project}/LineArt/api_022-01_192_0001.exr"  # Todo: change the file name after test
+    bpy.data.scenes["Scene"].node_tree.nodes["FILE_OUTPUT.AND"].base_path = \
+        f"//render/{movie_night_project}_{blend_project}/AnD/"
+    bpy.data.scenes["Scene"].node_tree.nodes["FILE_OUTPUT.POSTER"].base_path = \
+        f"//render/{movie_night_project}_{blend_project}/Poster/"
 
 bpy.ops.render.image_sequence(
     frames=str(frames),
