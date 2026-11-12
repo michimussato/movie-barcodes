@@ -38,10 +38,12 @@ texture_set = {
 bpy.data.scenes["Scene"].loom.frame_input = str(frames)
 bpy.data.scenes["Scene"].loom.command_line = False
 
-# Movie Night texture is currently relative
 # Todo:
-#  - [ ] publish to Ayon
-bpy.data.images["MOVIE_NIGHT_TEXTURE"].filepath = "/home/michael/Documents/Obsidian/Michael/Projects/Ap n Daun Movie Night/fonts/kalieb_luxury_font_purchased_M_002.png"
+#  - [x] use absoute path for MOVIE_NIGHT_TEXTURE node
+#  - [x] publish to Ayon
+#  - [ ] publish `.xcf` workfile to Ayon
+#        `/home/michael/Documents/Obsidian/Michael/Projects/Ap n Daun Movie Night/fonts/kalieb_luxury_font_purchased_003.xcf`
+# bpy.data.images["MOVIE_NIGHT_TEXTURE"].filepath = "/data/share/projects/ayon/MovieNight/shot/publish/texture/textureMovieNightFontTexture/hero/MoN_shot_textureMovieNightFontTexture_hero.png"
 
 if OVERRIDE_LOOM_OUTPUT_PATHS:
     movie_night_project: str = os.environ["MOVIE_NIGHT_PROJECT"]
@@ -75,6 +77,7 @@ if OVERRIDE_LOOM_OUTPUT_PATHS:
 # set the texture file paths in the texture nodes
 # for node in nodes:
 for node, texture_path in texture_set.items():
+    assert texture_path.exists(), "Texture file %s does not exist" % texture_path.as_posix()
     bpy.data.images[node].filepath = texture_path.as_posix()
 
 bpy.ops.render.image_sequence(
