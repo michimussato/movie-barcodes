@@ -189,20 +189,37 @@ Original error was: libstdc++.so.6: cannot open shared object file: No such file
 nix-shell
 # python3 -m venv .venv
 source .venv/bin/activate
+# pip install --editable .
 
 VIDEO_IN_FILE="<full_path_to_video_file>"
-BARCODE_OUT_DIR="<full_path_to_output_dir>"
+# BARCODE_OUT_DIR="<full_path_to_output_dir>"
+BARCODE_OUT_DIR=$(dirname "${VIDEO_IN_FILE}")
+
+# The final resolution of the poster
+WIDTH=810
+HEIGHT=1200
+SAMPLES=9
 
 movie-barcode \
-    --video ${VIDEO_IN_FILE} \
-    --out-dir ${BARCODE_OUT_DIR} \
-    --width 3000 \
-    --height 1 \
-    --sample-height 1
+    --video "${VIDEO_IN_FILE}" \
+    --out-dir "${BARCODE_OUT_DIR}" \
+    --width ${WIDTH} \
+    --height ${HEIGHT} \
+    --sample-height ${SAMPLES}
+```
+
+tile result
+
+```shell
+# tile of 2 is enough to create a full loop
+# 810x2 = 1620
+magick \
+    -size 1620x1200 tile:"/home/michael/Documents/Obsidian/Michael/Projects/Ap n Daun Movie Night/presentation/media/_9/Bad.Santa.2003.720p.BluRay.x264.AAC-[YTS.MX].png" \
+    "/home/michael/Documents/Obsidian/Michael/Projects/Ap n Daun Movie Night/presentation/media/_9/Bad.Santa.2003.720p.BluRay.x264.AAC-[YTS.MX].tile.png"
 ```
 
 Todo
-- [ ] maybe set `--width` to the actual with needed in the Movie Night poster?
+- [x] maybe set `--width` to the actual with needed in the Movie Night poster?
   - See: https://ayon.openstudiolandscapes.meemoo.ch/projects/MovieNight/products?project=MovieNight&type=version&id=61e4a5a2dcf611f19e85286b353056bf&activity=05bbe9b0dcf711f1a1cb4b46f1fcdc07
 
 # ffmpeg to Gif
@@ -218,14 +235,22 @@ Resources:
 
 ```shell
 MOVIE_NIGHT_PROJECT="BadSanta"
-INPUT="/data/share/projects/ayon/MovieNight/shot/publish/render/renderRendering${MOVIE_NIGHT_PROJECT}/hero/MoN_shot_renderRendering${MOVIE_NIGHT_PROJECT}_hero.*.png"
-#     "/data/share/projects/ayon/MovieNight/shot/publish/render/renderRenderingTheWolfOfWallStreet/hero/MoN_shot_renderRenderingTheWolfOfWallStreet_hero.1001.png"
+#INPUT="/data/share/projects/ayon/MovieNight/shot/publish/render/renderRendering${MOVIE_NIGHT_PROJECT}/hero/MoN_shot_renderRendering${MOVIE_NIGHT_PROJECT}_hero.*.png"
+#echo "/data/share/projects/ayon/MovieNight/shot/publish/render/renderRenderingTheWolfOfWallStreet/hero/MoN_shot_renderRenderingTheWolfOfWallStreet_hero.1001.png" | sed -e 's/[0-9]\{4\}/*/g'
+#echo "/data/share12345/projects/ayon/12345MovieNight/shot/publish/render/renderRenderingTheWolfOfWallStreet/hero/MoN_shot_renderRenderingTheWolfOfWallStreet_hero.1001.png" | tac
+#
+# tac reverses words while keeping the characters in order
+# rev reverses the entire string on a character level
+# Replace the last occurrence of '4 digits in a row' with '*'
+#echo "/data/share12345/projects/ayon/12345MovieNight/shot/publish/render/renderRenderingTheWolfOfWallStreet/hero/MoN_shot_renderRenderingTheWolfOfWallStreet_hero.1001.png" | rev | sed 's/[0-9]\{4\}/*/' | rev
+INPUT="/data/share/projects/ayon/MovieNight/shot/publish/render/renderRenderingBadSanta/hero/MoN_shot_renderRenderingBadSanta_hero.1001.png"
+#PADDING=4  # hardcoded for now
 OUTPUT="/home/michael/Notes/Obsidian/Michael/Projects/Ap n Daun Movie Night/presentation/media/MoN_shot_renderRendering${MOVIE_NIGHT_PROJECT}.gif"
 
 ffmpeg \
     -framerate 24 \
     -pattern_type glob \
-    -i "${INPUT}" \
+    -i "$(echo ${INPUT} | rev | sed "s/[0-9]\{4\}/*/" | rev)" \
     -y "${OUTPUT}"
 
 ```
