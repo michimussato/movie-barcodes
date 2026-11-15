@@ -11,6 +11,9 @@
   * [Single Pass](#single-pass)
   * [Multi Pass](#multi-pass)
   * [MP4 to Gif](#mp4-to-gif)
+* [Subtitiles](#subtitiles)
+  * [The Wolf of Wall Street](#the-wolf-of-wall-street)
+  * [MPV](#mpv)
 <!-- TOC -->
 
 ---
@@ -294,4 +297,65 @@ This gave me the desired result:
 ```shell
 # ffmpeg     -i "/home/michael/Documents/Obsidian/Michael/Projects/Ap n Daun Movie Night/presentation/media/_8/The Wolf of Wall Street 1929 fragment.mp4"     -loop 0     -ss 1.07009095773     -frames:v 245     "/home/michael/Documents/Obsidian/Michael/Projects/Ap n Daun Movie Night/presentation/media/_8/The Wolf of Wall Street 1929 fragment.gif"
 ffmpeg     -i "/home/michael/Documents/Obsidian/Michael/Projects/Ap n Daun Movie Night/presentation/media/_8/The Wolf of Wall Street 1929 fragment.mp4"     -loop 0     -ss 1.07009095773     -frames:v 245     "/home/michael/Documents/Obsidian/Michael/Projects/Ap n Daun Movie Night/presentation/media/_8/The Wolf of Wall Street 1929 fragment.gif"
+```
+
+# Subtitiles
+
+## The Wolf of Wall Street
+
+https://www.opensubtitles.com/en/movies/2013-the-wolf-of-wall-street
+https://subdl.com/subtitle/sd19528/the-wolf-of-wall-street/german
+
+Deps:
+- `bc`
+- `srt-delay`
+
+`srt-delay`:
+- [`srt-delay`](https://github.com/trizen/perl-scripts/blob/master/Subtitle/srt-delay)
+- https://aur.archlinux.org/packages/srt-delay
+
+
+
+```shell
+nix-shell -p bc
+```
+
+```
+$ perl ./subtitles/srt-delay.pl --help
+usage: ./subtitles/srt-delay.pl [options] [seconds] [file.srt]
+
+Options:
+    -b  --backup    : backup original to .bak
+    -d  --delay=f   : number of seconds of delay
+    -s  --scale=f   : scale the timestamps by a multiple
+
+Examples: ./subtitles/srt-delay.pl -b -d=1.439 file.srt
+          ./subtitles/srt-delay.pl -b -d=0.321 file.srt
+          ./subtitles/srt-delay.pl -b -d=-3.14 file.srt
+```
+
+```shell
+perl ./subtitles/srt-delay --scale=$(bc -ql <<< "23.976/25.0") --backup "Idiocracy (2006) (1080p WEB-DL x265 FreetheFish).de.srt"
+```
+
+## MPV
+
+[Default Config File](https://github.com/mpv-player/mpv/blob/master/etc/input.conf)
+
+`/home/michael/Notes/Obsidian/Michael/Excalidraw/Dailies/2025-11-08.md`
+
+Key Bindings:
+`z`: Sub-Delay -100ms
+`x`: Sub-Delay +100ms
+`F`: Sub-Scale -0.1
+`G`: Sub-Scale +0.1
+
+
+
+Delay: `-1000ms`
+
+`--pause`: to launch paused
+
+```shell
+mpv --volume-max=100 --volume=100 --fs --sub-delay=-1 --sub-scale=1.5 --sub-file="/home/michael/Documents/Obsidian/Michael/Projects/Ap n Daun Movie Night/presentation/media/_8/The.Wolf.of.Wall.Street.2013.720p.BluRay.x264.YIFY.srt" "/home/michael/Documents/Obsidian/Michael/Projects/Ap n Daun Movie Night/presentation/media/_8/The.Wolf.of.Wall.Street.2013.720p.BluRay.x264.YIFY.mp4" > /dev/null
 ```
