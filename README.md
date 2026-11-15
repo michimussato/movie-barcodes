@@ -356,6 +356,9 @@ Delay: `-1000ms`
 
 `--pause`: to launch paused
 
+Execute code in Obsidian:
+- https://github.com/twibiral/obsidian-execute-code
+
 ```shell
 MOVIE_FILE="/home/michael/Documents/Obsidian/Michael/Projects/Ap n Daun Movie Night/presentation/media/_8/The.Wolf.of.Wall.Street.2013.720p.BluRay.x264.YIFY.mp4"
 SRT_FILE="/home/michael/Documents/Obsidian/Michael/Projects/Ap n Daun Movie Night/presentation/media/_8/The.Wolf.of.Wall.Street.2013.720p.BluRay.x264.YIFY.srt"
