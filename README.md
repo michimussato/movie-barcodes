@@ -357,5 +357,15 @@ Delay: `-1000ms`
 `--pause`: to launch paused
 
 ```shell
-mpv --volume-max=100 --volume=100 --fs --sub-delay=-1 --sub-scale=1.5 --sub-file="/home/michael/Documents/Obsidian/Michael/Projects/Ap n Daun Movie Night/presentation/media/_8/The.Wolf.of.Wall.Street.2013.720p.BluRay.x264.YIFY.srt" "/home/michael/Documents/Obsidian/Michael/Projects/Ap n Daun Movie Night/presentation/media/_8/The.Wolf.of.Wall.Street.2013.720p.BluRay.x264.YIFY.mp4" > /dev/null
+MOVIE_FILE="/home/michael/Documents/Obsidian/Michael/Projects/Ap n Daun Movie Night/presentation/media/_8/The.Wolf.of.Wall.Street.2013.720p.BluRay.x264.YIFY.mp4"
+SRT_FILE="/home/michael/Documents/Obsidian/Michael/Projects/Ap n Daun Movie Night/presentation/media/_8/The.Wolf.of.Wall.Street.2013.720p.BluRay.x264.YIFY.srt"
+mpv \
+    --volume-max=100 \
+    --volume=100 \
+    --fs \
+    --sub-delay=-1 \
+    --sub-scale=1.5 \
+    --sub-file="${SRT_FILE}" \
+    "${MOVIE_FILE}" \
+    > /dev/null
 ```
