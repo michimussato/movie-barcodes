@@ -145,7 +145,7 @@ blender \
 ```shell
 export PY_TMP=$(mktemp --suffix=".py")
 
-tee ${PY_TMP} < "./blender.py" | bat --file-name ${PY_TMP} --language Python -
+tee "${PY_TMP}" < "./blender.py" | bat --paging=never --file-name "${PY_TMP}" --language Python -
 
 echo "${PY_TMP}"
 ```
@@ -183,27 +183,27 @@ export RENDER_LOG="/data/share/projects/ayon/MovieNight/shot/work/rendering/rend
 
 
 # Create and start `tmux` session
-tmux new -d -s ${MOVIE_NIGHT_PROJECT} 'nix develop github:michimussato/flake-prod#blender-4-4-3-devshell --command fhs'
-tmux a -t ${MOVIE_NIGHT_PROJECT}
+tmux new -d -s "${MOVIE_NIGHT_PROJECT}" 'nix develop github:michimussato/flake-prod#blender-4-4-3-devshell --command fhs'
+tmux a -t "${MOVIE_NIGHT_PROJECT}"
 
 
 set -x
 
-mkdir -p $(dirname ${RENDER_LOG})
+mkdir -p $(dirname "${RENDER_LOG}")
 
-env | tee ${RENDER_LOG}
+env | tee "${RENDER_LOG}"
 
-file ${AYON_SCREENSHOT} | tee --append ${RENDER_LOG}
-file ${AYON_DATE} | tee --append ${RENDER_LOG}
-file ${AYON_BARCODE} | tee --append ${RENDER_LOG}
-file ${AYON_POSTER} | tee --append ${RENDER_LOG}
+file "${AYON_SCREENSHOT}" | tee --append "${RENDER_LOG}"
+file "${AYON_DATE}" | tee --append "${RENDER_LOG}"
+file "${AYON_BARCODE}" | tee --append "${RENDER_LOG}"
+file "${AYON_POSTER}" | tee --append "${RENDER_LOG}"
 
 blender \
     --background \
-    ${MOVIE_NIGHT_BLEND_FILE} \
+    "${MOVIE_NIGHT_BLEND_FILE}" \
     --python "${PY_TMP}" \
     --threads 8 \
-    2>&1 | tee --append ${RENDER_LOG}
+    2>&1 | tee --append "${RENDER_LOG}"
 
 set +x
 ```
@@ -266,7 +266,31 @@ Poster
 
 # Known Issues
 
+Blender is calling
+`~/.local/share/AYON/addons/blender_1.1.9/ayon_blender/blender_addon/startup/init.py`
+
 ```
+Traceback (most recent call last):
+  File "/data/share/tools/blender-4.4.3-linux-x64/4.4/scripts/modules/bpy/utils/__init__.py", line 142, in _test_import
+    mod = __import__(module_name)
+          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/michael/.local/share/AYON/addons/blender_1.1.9/ayon_blender/blender_addon/startup/init.py", line 5, in <module>
+    raise ModuleNotFoundError(
+ModuleNotFoundError: No module named 'ayon_core'. This usually happens if Blender is launched without the --python-use-system-env argument. Make sure you have the Blender application 'Arguments' configured correctly so that Blender has access to the launched context's PYTHONPATH.
+```
+
+If `ayon_core` is not available in `PYTHONPATH` we get 
+this error.
+
+```
++ command blender --python-use-system-env --enable-autoexec --verbose 4 --debug --debug-cycles --debug-ffmpeg --background /data/share/projects/ayon/MovieNight/shot/publish/workfile/workfileRendering/hero/MoN_shot_workfileRendering_hero.blend --python /tmp/tmp.oRUjBll9bW.py --threads 8
+Traceback (most recent call last):
+  File "/home/michael/.local/share/AYON/addons/blender_1.1.9/ayon_blender/blender_addon/startup/init.py", line 2, in <module>
+    from ayon_core.pipeline import install_host
+ModuleNotFoundError: No module named 'ayon_core'
+
+The above exception was the direct cause of the following exception:
+
 Traceback (most recent call last):
   File "/data/share/tools/blender-4.4.3-linux-x64/4.4/scripts/modules/bpy/utils/__init__.py", line 142, in _test_import
     mod = __import__(module_name)
