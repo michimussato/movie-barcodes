@@ -3,6 +3,17 @@ import pathlib
 import bpy
 
 
+# Enable Loom
+# Bugged via CLI in 4.4.3
+# - https://projects.blender.org/blender/blender/issues/126029
+# - https://projects.blender.org/blender/blender/issues/87629
+# `bpy.ops.preferences.addon_enable(module="loom")` works fine though
+
+
+# Do we also have to disable it again?
+bpy.ops.preferences.addon_enable(module="loom")
+
+
 OVERRIDE_LOOM_OUTPUT_PATHS: bool = True
 
 
@@ -61,7 +72,7 @@ if OVERRIDE_LOOM_OUTPUT_PATHS:
     # `/data/share/projects/ayon/MovieNight/shot/work/rendering/render/`
     # but this is arbitrary. Maybe there is
     # a better target directory.
-    render_root: pathlib.Path = pathlib.Path("/data/share/projects/ayon/MovieNight/shot/work/rendering/render/")
+    render_root: pathlib.Path = pathlib.Path(os.environ["RENDER_ROOT"])
     render_root.mkdir(
         exist_ok=True,
         parents=True,
@@ -88,3 +99,5 @@ bpy.ops.render.image_sequence(
     validate_scene=False,
     render_preset='EMPTY',
 )
+
+bpy.ops.preferences.addon_disable(module="loom")
